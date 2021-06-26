@@ -1,0 +1,426 @@
+/* UNIVERSAL */
+:root {
+  /* Font Sizing */
+  --baseFontSize: 16px;
+  --baseLineHeight: 1.5;
+  --headingLineHeight: 1.2;
+
+  /* Colors */
+
+  --blue: rgb(116, 119, 191);
+  --lightBlue: rgb(213, 214, 236);
+  --darkBlue: rgb(77, 76, 114);
+
+  --green: rgb(129, 201, 143);
+  --white: rgb(255, 255, 255);
+
+  --gray: rgb(153, 153, 153);
+  --lightGray: rgb(245, 245, 245);
+  --font-darkGray: rgb(119, 119, 119);
+  --font-black: rgb(55, 55, 55);
+  /* Spacing */
+  --pad: 1em;
+  /* Breakpoints */
+  --smallBreakpoint: 600px;
+  --largeBreakpoint: 768px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  list-style: none;
+  font-family: "Lato", sans-serif;
+}
+
+.wrapper {
+  width: 97%;
+  margin: auto;
+}
+
+/* #region  GRID LAYOUT */
+.grid-container {
+  display: grid;
+  grid-template-columns: 100%;
+  grid-template-rows: auto;
+  grid-template-areas:
+    "header"
+    "navbar"
+    "dashboard";
+}
+
+.header {
+  grid-area: header;
+}
+
+.dashboard {
+  grid-area: dashboard;
+  display: grid;
+  grid-template-columns: 100%;
+  grid-template-rows: auto;
+}
+
+.navbar {
+  grid-area: navbar;
+}
+
+@media screen and (min-width: 768px) {
+  .grid-container {
+    grid-template-columns: 75px 1fr;
+    grid-template-areas:
+      "header header"
+      "navbar dashboard";
+  }
+}
+
+@media screen and (min-width: 1768px) {
+  .dashboard {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .col-one {
+    grid-column: 1 / span 2;
+  }
+}
+/* #endregion */
+
+/* #region  HEADER */
+header {
+  background-color: #7477bf;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  color: #fff;
+  padding: 0 20px;
+}
+
+header :is(span, h3) {
+  font-weight: 300;
+}
+
+.logo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+}
+
+.notifications {
+  display: flex;
+  justify-content: flex-end;
+  align-self: flex-end;
+  width: 55px;
+  margin-right: 25px;
+  cursor: pointer;
+}
+
+.notifications svg {
+  width: 70%;
+  fill: var(--white);
+}
+
+#notifications-icon {
+  height: 10px;
+  width: 10px;
+  border-radius: 50%;
+  background-color: var(--green);
+  position: absolute;
+}
+
+.user-image {
+  display: flex;
+  width: 55px;
+  margin: 0 20px;
+}
+
+.user-image::before {
+  content: "";
+  border-left: 1px solid var(--white);
+  position: relative;
+  left: -20px;
+}
+
+.user-image img {
+  width: 100%;
+  border-radius: 50%;
+}
+/* #endregion */
+/* #region  NAVIGATION BAR */
+.navbar {
+  display: flex;
+  background-color: var(--darkBlue);
+  justify-content: space-around;
+}
+
+.navbar svg {
+  fill: var(--white);
+  /* resizes icons */
+  width: 55px;
+  transition: transform 1s;
+  padding: 10px;
+}
+
+.navbar svg:hover {
+  transform: scale(0.9);
+  transition: 0.3s;
+  fill: #81c98f;
+}
+
+@media screen and (min-width: 768px) {
+  .navbar {
+    flex-flow: column;
+    justify-content: flex-start;
+    padding: 10px;
+  }
+
+  .navbar svg {
+    width: 100%;
+  }
+}
+/* #endregion */
+
+/* DASHBOARD - MAIN */
+
+/* WIDGETS */
+
+/* ----------------- */
+/* DASHBOARD HEADER  */
+/* ----------------- */
+
+/* .dashboard-header, .dashboard-header * {border: 1px solid red;} */
+
+.dashboard-header {
+  margin-left: 1.5%;
+  display: flex;
+  align-items: center;
+  height: 75px;
+}
+
+.dashboard-header h2 {
+  padding-right: 20px;
+  margin-left: 0;
+}
+
+.dashboard-header-search {
+  display: flex;
+  flex-grow: 1;
+  align-self: stretch;
+  background-color: #f5f5f5;
+  border-left: 1px solid #999;
+  border-bottom: 1px solid #999;
+}
+
+.dashboard-header-search input {
+  width: 100%;
+  padding-left: 20px;
+  background-color: #f5f5f5;
+  border: none;
+}
+
+
+
+/* ------- */
+/* ALERTS  */
+/* ------- */
+
+.alert-banner {
+  margin: 20px 0;
+  background-color: #7477bf;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 30px 20px;
+  color: #fff;
+  border-radius: 5px;
+  font-weight: 300;
+}
+
+.alert-banner-close {
+  cursor: pointer;
+  font-weight: 700;
+  padding: 15px;
+}
+
+
+
+/* ----------------- */
+/* Traffic Overview  */
+/* ----------------- */
+.traffic-nav {
+  display: flex;
+  justify-content: space-around;
+  list-style: none;
+  padding-left: 0;
+}
+
+.traffic-nav li {
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.traffic-nav .active {
+  background-color: #81c98f;
+}
+
+/* ------------ */
+/* Social Stats */
+/* ------------ */
+
+/* Social stats widget area */
+.social-stats {
+  display: flex;
+  flex-flow: column;
+}
+
+/* Container for individual social stats */
+.social-container {
+  display: flex;
+  align-items: center;
+
+  margin: 10px;
+  border-radius: 10px;
+  border: 1px solid #4d4c72;
+  background-color: #f5f5f5;
+}
+
+.social-stats svg {
+  width: 50px;
+  padding: 10px;
+  fill: #7477bf;
+}
+
+.social-text {
+  flex-grow: 1;
+  margin-left: 10px;
+}
+
+.social-text p:first-child {
+  font-size: smaller;
+  font-weight: 700;
+  color: #7477bf;
+}
+
+/* --styles the number font in the social text */
+.social-text p:last-child {
+  font-size: xx-large;
+  color: #999;
+}
+
+/* ----------------------------- */
+/* NEW MEMBERS - RECENT ACTIVITY */
+/* ----------------------------- */
+
+.new-members,
+.recent-activity {
+  display: flex;
+  flex-flow: column;
+}
+
+.members-container,
+.activity-container {
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  margin: auto;
+  padding: 20px;
+}
+
+/* --applies border to all containers except last to allow for the section border */
+.members-container:not(:last-of-type),
+.activity-container:not(:last-of-type) {
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  margin: auto;
+  border-bottom: 1px solid grey;
+}
+
+.profile-image {
+  height: 100px;
+  border-radius: 50%;
+}
+
+.members-text,
+.activity-text {
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+}
+
+/* --styling hyperlink email text */
+.members-text a {
+  color: #7477bf;
+  text-decoration: none;
+}
+
+/* --hide greater than arrow in mobile display */
+.activity-container > p:last-child {
+  display: none;
+}
+
+/* ------------- */
+/* MESSAGE USER  */
+/* ------------- */
+
+.message-user {
+  display: flex;
+  flex-flow: column;
+}
+
+.message-form {
+  display: flex;
+  flex-flow: column;
+}
+
+.message-form input,
+.message-form textarea {
+  border-radius: 10px;
+  border: 1px solid #4d4c72;
+  background-color: #f5f5f5;
+  margin: 10px 0;
+  padding: 10px;
+}
+
+.button-primary {
+  background-color: #7477bf;
+  color: white;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #4d4c72;
+  margin: 10px 0;
+}
+
+/* --------- */
+/* SETTINGS  */
+/* --------- */
+
+.settings label {
+  display: flex;
+  flex-flow: row;
+  align-items: center;
+  margin: 20px 0;
+}
+
+.settings strong {
+  width: 100%;
+}
+
+.settings-buttons {
+  display: flex;
+  justify-content: space-between;
+}
+
+.settings-buttons button {
+  margin: 10px 0;
+  width: 49%;
+}
+
+#cancel {
+  background-color: #999;
+}
