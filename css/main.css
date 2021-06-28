@@ -1,14 +1,14 @@
-/* UNIVERSAL */
+/* AUTHOR: Chris Adams */
+/* DATE: 29/06/2021 */
+/* NOTES: CSS is structured according to layout and presentation on the page. */
+
+/* #region  Variables **************************/
+/* Establishes base colour variables */
 :root {
-  /* Font Sizing */
-  --baseFontSize: 16px;
-  --baseLineHeight: 1.5;
-  --headingLineHeight: 1.2;
-
   /* Colors */
-
-  --blue: rgb(116, 119, 191);
+  --lighterBlue: rgb(229, 230, 252);
   --lightBlue: rgb(213, 214, 236);
+  --blue: rgb(116, 119, 191);
   --darkBlue: rgb(77, 76, 114);
 
   --green: rgb(129, 201, 143);
@@ -18,13 +18,10 @@
   --lightGray: rgb(245, 245, 245);
   --font-darkGray: rgb(119, 119, 119);
   --font-black: rgb(55, 55, 55);
-  /* Spacing */
-  --pad: 1em;
-  /* Breakpoints */
-  --smallBreakpoint: 600px;
-  --largeBreakpoint: 768px;
 }
-
+/* #endregion */
+/* #region  General / Typography **************************/
+/* General styling and typography */
 * {
   margin: 0;
   padding: 0;
@@ -33,12 +30,53 @@
   font-family: "Lato", sans-serif;
 }
 
-.wrapper {
-  width: 97%;
-  margin: auto;
+:is(li, button, label, .notifications, .alert-banner-close #close) {
+  cursor: pointer;
 }
 
-/* #region  GRID LAYOUT */
+html {
+  font-size: 1em;
+}
+
+h1 {
+  font-size: 1.2em;
+}
+
+h2 {
+  font-size: 1em;
+}
+h3 {
+  font-size: 0.8em;
+}
+
+:is(p, select, a) {
+  font-size: 0.7em;
+}
+
+::selection {
+  background-color: var(--blue);
+  color: var(--white);
+}
+
+canvas {
+  max-width: 100%;
+}
+/* #endregion */
+/* #region  Custom animations **************************/
+/* Notificiation bell animation */
+@keyframes notification-wriggle {
+  0% {
+    transform: rotate(30deg);
+  }
+  50% {
+    transform: rotate(-30deg);
+  }
+  100% {
+    transform: rotate(30deg);
+  }
+}
+/* #endregion */
+/* #region  GRID LAYOUT **************************/
 .grid-container {
   display: grid;
   grid-template-columns: 100%;
@@ -64,6 +102,7 @@
   grid-area: navbar;
 }
 
+/* #region  Grid layout for tablet displays */
 @media screen and (min-width: 768px) {
   .grid-container {
     grid-template-columns: 75px 1fr;
@@ -71,104 +110,174 @@
       "header header"
       "navbar dashboard";
   }
-}
 
-@media screen and (min-width: 1768px) {
   .dashboard {
     grid-template-columns: 1fr 1fr;
   }
 
-  .col-one {
+  :is(.col-one, section) {
     grid-column: 1 / span 2;
+  }
+
+  .traffic-daily {
+    grid-column: 1 / span 1;
+  }
+
+  .mobile-users {
+    grid-column: 2 / span 1;
   }
 }
 /* #endregion */
+/* #region  Grid layout for desktop displays */
+@media screen and (min-width: 1024px) {
+  .new-members,
+  .message-user {
+    grid-column: 1 / span 1;
+  }
 
-/* #region  HEADER */
+  .recent-activity,
+  .settings {
+    grid-column: 2 / span 1;
+  }
+}
+/* #endregion */
+/* #endregion */
+
+/* #region  HEADER **************************/
 header {
-  background-color: #7477bf;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px;
-  color: #fff;
-  padding: 0 20px;
+  color: var(--white);
+  background-color: var(--blue);
+  padding: 10px 15px;
 }
 
-header :is(span, h3) {
+header :is(span, h3),
+.alert-banner {
   font-weight: 300;
 }
 
 .logo {
+  margin-right: auto;
+}
+
+.notification-content {
   display: flex;
-  justify-content: center;
   align-items: center;
 }
 
-.user-info {
-  display: flex;
-  align-items: center;
+.notification-content :is(:not(:last-child)) {
+  margin-right: 10px;
 }
 
 .notifications {
   display: flex;
-  justify-content: flex-end;
-  align-self: flex-end;
-  width: 55px;
-  margin-right: 25px;
-  cursor: pointer;
+  border-right: 1px solid var(--lightGray);
 }
 
-.notifications svg {
-  width: 70%;
+#notification-bell {
+  width: 25px;
   fill: var(--white);
+}
+
+#notification-bell:hover {
+  animation: notification-wriggle 0.4s linear infinite;
 }
 
 #notifications-icon {
-  height: 10px;
-  width: 10px;
+  height: 7px;
+  width: 7px;
   border-radius: 50%;
+  position: relative;
+  right: 9px;
+  top: 2px;
   background-color: var(--green);
-  position: absolute;
 }
 
 .user-image {
-  display: flex;
-  width: 55px;
-  margin: 0 20px;
-}
-
-.user-image::before {
-  content: "";
-  border-left: 1px solid var(--white);
-  position: relative;
-  left: -20px;
-}
-
-.user-image img {
-  width: 100%;
+  width: 35px;
   border-radius: 50%;
 }
+
 /* #endregion */
-/* #region  NAVIGATION BAR */
+/* #region  NOTIFICATION POPUP **************************/
+.notification-overlay {
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  position: absolute;
+  display: grid;
+  justify-content: center;
+  align-content: center;
+  visibility: hidden;
+  background-color: rgba(213, 214, 236, 0.8);
+}
+
+.notification-panel {
+  display: flex;
+  flex-flow: column;
+  background-color: var(--lightBlue);
+  width: 80vw;
+  border: 4px solid var(--white);
+}
+
+:is(.notification-header, .notification-list-item) {
+  display: flex;
+  flex-flow: row;
+  align-items: center;
+  padding: 15px;
+}
+
+.notification-header {
+  background-color: var(--darkBlue);
+  color: var(--white);
+}
+
+.notification-list-item h3 {
+  background-color: var(--darkBlue);
+  color: var(--white);
+  padding: 10px 14px;
+  border-radius: 50%;
+}
+
+:is(.notification-header, .notification-list-item) span {
+  margin-left: auto;
+  padding-left: 10vw;
+  font-size: 0.7em;
+  text-align: right;
+}
+
+.notification-list-item:nth-of-type(odd) {
+  background-color: var(--lighterBlue);
+}
+
+@media screen and (min-width: 768px) {
+  .notification-panel {
+    width: 50vw;
+  }
+}
+/* #endregion */
+/* #region  NAVIGATION BAR **************************/
 .navbar {
   display: flex;
-  background-color: var(--darkBlue);
   justify-content: space-around;
+  background-color: var(--darkBlue);
+  padding: 0 10px;
 }
 
 .navbar svg {
-  fill: var(--white);
-  /* resizes icons */
   width: 55px;
   transition: transform 1s;
   padding: 10px;
+  fill: var(--white);
 }
 
 .navbar svg:hover {
   transform: scale(0.9);
   transition: 0.3s;
-  fill: #81c98f;
+  fill: var(--green);
 }
 
 @media screen and (min-width: 768px) {
@@ -184,21 +293,37 @@ header :is(span, h3) {
 }
 /* #endregion */
 
-/* DASHBOARD - MAIN */
 
-/* WIDGETS */
+/* DASHBOARD STYLING START*/
 
-/* ----------------- */
-/* DASHBOARD HEADER  */
-/* ----------------- */
+/* #region  General styling */
 
-/* .dashboard-header, .dashboard-header * {border: 1px solid red;} */
+section {
+  padding: 15px;
+  border-bottom: 2px solid var(--lightGray);
+  border-right: 2px solid var(--lightGray);
+}
+
+main :is(h3) {
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+button {
+  transition: opacity 1s;
+}
+button:hover {
+  opacity: 0.6;
+}
+
+/* #endregion */
+/* #region  Dashboard Header **************************/
 
 .dashboard-header {
-  margin-left: 1.5%;
   display: flex;
   align-items: center;
-  height: 75px;
+  height: 60px;
+  margin-left: 15px;
 }
 
 .dashboard-header h2 {
@@ -210,67 +335,84 @@ header :is(span, h3) {
   display: flex;
   flex-grow: 1;
   align-self: stretch;
-  background-color: #f5f5f5;
-  border-left: 1px solid #999;
-  border-bottom: 1px solid #999;
+  background-color: var(--lightGray);
+  border-left: 1px solid var(--gray);
+  border-bottom: 1px solid var(--gray);
 }
 
 .dashboard-header-search input {
   width: 100%;
   padding-left: 20px;
-  background-color: #f5f5f5;
+  background-color: var(--lightGray);
   border: none;
 }
-
-
-
-/* ------- */
-/* ALERTS  */
-/* ------- */
-
+/* #endregion */
+/* #region  Alerts **************************/
+#alerts {
+  padding: 15px;
+}
 .alert-banner {
-  margin: 20px 0;
-  background-color: #7477bf;
-  height: 30px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 30px 20px;
-  color: #fff;
+  background-color: var(--blue);
+  height: 30px;
+  padding: 20px 20px;
+  color: var(--white);
   border-radius: 5px;
-  font-weight: 300;
 }
 
 .alert-banner-close {
-  cursor: pointer;
   font-weight: 700;
-  padding: 15px;
+  padding: 10px;
+}
+/* #endregion */
+/* #region  Traffic / Charts **************************/
+
+.traffic-charts,
+.traffic-daily,
+.mobile-users {
+  display: flex;
+  flex-flow: column;
+  justify-content: space-between;
 }
 
+.traffic-header {
+  display: flex;
+  flex-flow: column;
+}
 
-
-/* ----------------- */
-/* Traffic Overview  */
-/* ----------------- */
 .traffic-nav {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   list-style: none;
   padding-left: 0;
 }
 
 .traffic-nav li {
   padding: 10px;
-  border-radius: 10px;
+  border-radius: 20px;
 }
 
 .traffic-nav .active {
-  background-color: #81c98f;
+  background-color: var(--green);
+  color: var(--white);
 }
 
-/* ------------ */
-/* Social Stats */
-/* ------------ */
+@media screen and (min-width: 768px) {
+  .traffic-header {
+    flex-flow: wrap;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .traffic-nav li:not(:first-child) {
+    margin-left: 10px;
+  }
+}
+
+/* #endregion */
+/* #region  Social Stats **************************/
 
 /* Social stats widget area */
 .social-stats {
@@ -282,44 +424,60 @@ header :is(span, h3) {
 .social-container {
   display: flex;
   align-items: center;
-
-  margin: 10px;
+  margin: 10px 0;
   border-radius: 10px;
-  border: 1px solid #4d4c72;
-  background-color: #f5f5f5;
+  border: 1px solid var(--gray);
+  background-color: var(--lightGray);
+  flex-grow: 1;
+}
+
+.social-image {
+  width: 50px;
+  padding: 10px;
+  margin: 10px;
+  background-color: var(--blue);
+  border-radius: 50%;
+  fill: var(--white);
 }
 
 .social-stats svg {
-  width: 50px;
-  padding: 10px;
-  fill: #7477bf;
+  display: block;
+  margin: auto;
 }
 
 .social-text {
   flex-grow: 1;
-  margin-left: 10px;
+  margin: 0 10px;
 }
 
 .social-text p:first-child {
   font-size: smaller;
   font-weight: 700;
-  color: #7477bf;
+  color: var(--blue);
 }
 
 /* --styles the number font in the social text */
 .social-text p:last-child {
   font-size: xx-large;
-  color: #999;
+  color: var(--gray);
 }
 
-/* ----------------------------- */
-/* NEW MEMBERS - RECENT ACTIVITY */
-/* ----------------------------- */
+@media screen and (min-width: 768px) {
+  .socials {
+    display: flex;
+  }
 
+  .social-container:is(:not(:first-of-type)) {
+    margin-left: 10px;
+  }
+}
+/* #endregion */
+/* #region  Members / Recent Activity **************************/
 .new-members,
 .recent-activity {
   display: flex;
   flex-flow: column;
+  justify-content: space-between;
 }
 
 .members-container,
@@ -329,20 +487,21 @@ header :is(span, h3) {
   align-items: center;
   margin: auto;
   padding: 20px;
+  text-align: center;
 }
 
-/* --applies border to all containers except last to allow for the section border */
-.members-container:not(:last-of-type),
-.activity-container:not(:last-of-type) {
-  display: flex;
-  flex-flow: column;
-  align-items: center;
-  margin: auto;
-  border-bottom: 1px solid grey;
+:is(.members-container, .activity-container):not(:last-of-type) {
+  border-bottom: 1px solid var(--lightGray);
+}
+:is(.members-container, .activity-container):is(:last-of-type) {
+  padding-bottom: 0;
+}
+:is(.members-container, .activity-container):is(:first-of-type) {
+  padding-top: 10px;
 }
 
 .profile-image {
-  height: 100px;
+  height: 55px;
   border-radius: 50%;
 }
 
@@ -355,7 +514,7 @@ header :is(span, h3) {
 
 /* --styling hyperlink email text */
 .members-text a {
-  color: #7477bf;
+  color: var(--blue);
   text-decoration: none;
 }
 
@@ -364,63 +523,102 @@ header :is(span, h3) {
   display: none;
 }
 
-/* ------------- */
-/* MESSAGE USER  */
-/* ------------- */
+@media screen and (min-width: 768px) {
+  .members-container,
+  .activity-container {
+    flex-flow: row;
+    text-align: left;
+  }
+
+  .members-container > p {
+    margin-left: auto;
+  }
+  .members-text,
+  .activity-text {
+    margin-left: 20px;
+    align-items: flex-start;
+  }
+  .activity-container > p:last-child {
+    display: block;
+    margin-left: auto;
+    font-size: 2em;
+    color: var(--blue);
+  }
+}
+
+/* #endregion */
+/* #region  Message User */
 
 .message-user {
   display: flex;
   flex-flow: column;
+  justify-content: space-between;
 }
 
-.message-form {
-  display: flex;
-  flex-flow: column;
-}
-
-.message-form input,
-.message-form textarea {
+.form-field,
+.message-form :is(input, textarea) {
   border-radius: 10px;
-  border: 1px solid #4d4c72;
-  background-color: #f5f5f5;
+  border: 1px solid var(--gray);
+  background-color: var(--lightGray);
+  color: var(--gray);
   margin: 10px 0;
-  padding: 10px;
-}
-
-.button-primary {
-  background-color: #7477bf;
-  color: white;
-  padding: 10px;
-  border-radius: 10px;
-  border: 1px solid #4d4c72;
-  margin: 10px 0;
-}
-
-/* --------- */
-/* SETTINGS  */
-/* --------- */
-
-.settings label {
-  display: flex;
-  flex-flow: row;
-  align-items: center;
-  margin: 20px 0;
-}
-
-.settings strong {
+  padding: 20px 15px;
   width: 100%;
 }
 
-.settings-buttons {
+/* #endregion */
+/* #region  Settings */
+
+.settings {
+  display: flex;
+  flex-flow: column;
+  justify-content: space-between;
+}
+
+.settings-content {
+  display: flex;
+  flex-flow: column;
+  margin: 10px 0px 30px;
+}
+
+.switch-light {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin: 10px 0;
+}
+
+label strong {
+  flex-basis: 210px;
+}
+
+.switch-ios.switch-light > span {
+  width: 125px;
+}
+
+.settings-button {
   display: flex;
   justify-content: space-between;
 }
 
-.settings-buttons button {
+.button-primary,
+.button-disabled {
+  background-color: var(--blue);
+  color: var(--white);
+  padding: 15px;
+  width: 100%;
+  border-radius: 5px;
+  border: 1px solid var(--gray);
+  flex-basis: 49%;
+  text-transform: uppercase;
   margin: 10px 0;
-  width: 49%;
 }
 
-#cancel {
-  background-color: #999;
+.button-disabled {
+  background-color: var(--gray);
 }
+
+/* #endregion */
+
+/* DASHBOARD STYLING END */
+
