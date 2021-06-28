@@ -1,6 +1,10 @@
 // AUTHOR: Chris Adams
 // DATE: 29/06/2021
 // NOTES: JS is sectioned into six components with individual commentary within each.
+/* REGION USE: I've used regions to section my content. Makes it easier for me to read. Instructions for expanding and collapsing in VSC are below:
+Ctrl+K Ctrl+0   Fold (collapse) all regions
+Ctrl+K Ctrl+J   Unfold (uncollapse) all regions
+*/
 
 /* #region  ALERTS */
 // Establishes the base notification alert features displayed on the dashboard. When the notification bell is clicked, an alert is inserted into the innerHTML of the main dashboard. The unread notification icon is turned off, and a popup notification panel displays a number of messages for the user. Additional click events are added to close the alert and notification panel. 
