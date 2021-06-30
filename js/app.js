@@ -7,32 +7,30 @@ Ctrl+K Ctrl+J   Unfold (uncollapse) all regions
 */
 
 /* #region  ALERTS */
-// Establishes the base notification alert features displayed on the dashboard. When the notification bell is clicked, an alert is inserted into the innerHTML of the main dashboard. The unread notification icon is turned off, and a popup notification panel displays a number of messages for the user. Additional click events are added to close the alert and notification panel. 
+// Establishes the base notification alert features displayed on the dashboard. When the notification bell is clicked, an alert is inserted into the innerHTML of the main dashboard. The unread notification icon is turned off, and a popup notification panel displays a number of messages for the user. Additional click events are added to close the alert and notification panel.
 const notificationBell = document.getElementById("notification-bell");
 const alertBanner = document.getElementById("alerts");
 const notificationIcon = document.getElementById("notifications-icon");
 const notificationPanel = document.getElementById("overlay");
 const notificationPanelClose = document.getElementById("close");
 
-notificationBell.addEventListener("click", () => {
-  if (alertBanner.style.display !== "none") {
-    alertBanner.innerHTML = `
+alertBanner.innerHTML = `
       <div class="alert-banner">
         <p><strong>Alert:</strong> You have <strong>6</strong> overdue tasks to complete</p>
         <p class="alert-banner-close">X</p>
       </div>
       `;
-  }
-  alertBanner.style.display = "block";
-  notificationIcon.style.backgroundColor = "transparent";
-  notificationPanel.style.visibility = "visible";
-});
 
 alertBanner.addEventListener("click", (e) => {
   const element = e.target;
   if (element.classList.contains("alert-banner-close")) {
     alerts.style.display = "none";
   }
+});
+
+notificationBell.addEventListener("click", () => {
+  notificationIcon.style.backgroundColor = "transparent";
+  notificationPanel.style.visibility = "visible";
 });
 
 notificationPanelClose.addEventListener("click", () => {
@@ -162,7 +160,7 @@ let trafficToggles = document.querySelectorAll(".traffic-nav-link");
 trafficToggles.forEach((element) => {
   element.addEventListener("click", (e) => {
     let activeOn = document.querySelectorAll(".active");
-    
+
     activeOn.forEach((element) => {
       element.classList.remove("active");
     });
@@ -184,7 +182,6 @@ trafficToggles.forEach((element) => {
     }
 
     trafficChartCanvas.update();
-
   });
 });
 /* #endregion */
@@ -230,4 +227,18 @@ cancel.addEventListener("click", () => {
   timeZone.value = "default";
   localStorage.clear();
 });
+
+// Creates a function that parses the saved localStorage variables back into booleans, which are then applied as base styles on the page when it is loaded. 
+function loadSettings (){    
+  let emailSettings = JSON.parse(localStorage.getItem('emailNotifications'));
+  let profileSettings = JSON.parse(localStorage.getItem('publicProfile'));
+  let timeSettings = localStorage.getItem('timeZone');
+  emailNotifications.checked = emailSettings;
+  profilePublic.checked = profileSettings;
+  timeZone.value = timeSettings;
+}
+
+loadSettings();
+
+
 /* #endregion */
